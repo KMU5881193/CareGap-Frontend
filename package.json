@@ -1,0 +1,13 @@
+{
+  "name": "caregap-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@11.25.0",
+  "scripts": {
+    "dev": "pnpm --filter @caregap/web dev",
+    "build": "pnpm --filter @caregap/web build",
+    "typecheck": "pnpm --filter @caregap/web typecheck",
+    "test": "pnpm --filter @caregap/web test",
+    "test:e2e": "pnpm --filter @caregap/web test:e2e"
+  }
+}
