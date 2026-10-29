@@ -1,17 +1,60 @@
-# CareGap Frontend
-React/Vite SPA 추천 스택의 초기 설정. TypeScript 7.0.2는 Backend와 동일.
+# CareGap Frontend — Flutter + React/Vite
 
-pnpm install --frozen-lockfile → pnpm dev. 표시되는 실제 로컬 URL을 사용하세요.
-pnpm typecheck / pnpm test / pnpm build.
-E2E: pnpm --filter @caregap/web exec playwright install chromium 후 pnpm test:e2e.
+Flutter 모바일 앱은 프로젝트 루트에, 기존 React/Vite 워크스페이스는 `apps/web` 및 `packages`에 있습니다. 기존 웹 코드·이력은 보존했습니다. 모바일 앱은 최종 통합 백엔드에 실제 HTTP로 연결하며, 합성 데이터 전용입니다.
 
-apps/web 및 packages/* pnpm workspace. Router/Query 연결, 폼/Zod·FullCalendar·MSW 의존성, Tailwind 4·shadcn 설정 포함. 업무 화면 구현은 FE 담당자에게 남깁니다.
-API 개발 프록시는 기본 비활성입니다. 필요한 경우 apps/web/.env.example을 같은 폴더의 .env로 복사하고 BACKEND_URL에 실제 백엔드 주소를 지정하세요. 배포 시 동일 출처 /api 라우팅은 별도 필요합니다. 인증은 BE1 계약 확정 후 연결하며 개발 헤더 자동 전송 없음.
-PWA 산출물은 생성하지만 서비스워커 자동 등록은 보류. 민감한 API 응답 캐시 금지. 아이콘/설치 UX/푸시/카메라·녹음/네이티브 기능은 미확정.
-Backend docs/contracts.md 및 docs/openapi.yaml을 공동 검토하세요.
+## Flutter 모바일 앱
 
-완전히 새로 시작하는 프로젝트입니다. 기존 Next.js CareGap·caregap-camera-poc은 아이디어/요구사항 참고 자료일 뿐 코드·설정 복사 기반이 아닙니다.
-팀 표준 프론트/백엔드 포트는 아직 미정입니다. Vite 자체 기본 개발 포트는 5173이며 충돌 시 다음 사용 가능한 포트를 시도합니다. 이는 프레임워크 동작 설명이며 팀 고정값이 아닙니다.
-필요하면 pnpm --filter @caregap/web dev --port <선택한-로컬-포트>로 일회성 지정하세요. Playwright는 Vite port: 0으로 운영체제가 할당한 임시 포트를 사용하고 종료 시 서버를 닫습니다.
+Flutter 3.47.4 / Dart 3.13.3에서 검증했습니다.
 
-초대 없이 참여하는 Fork/PR 절차와 직접 Push 권한의 차이는 [CONTRIBUTING.md](CONTRIBUTING.md)를 참고하세요. 출처·포트 감사표는 [docs/initialization-audit.md](docs/initialization-audit.md)에 있습니다.
+```bash
+flutter pub get
+flutter run
+```
+
+임시 주소를 앱에 고정하지 않습니다. 최신 HTTPS 주소를 반드시 지정하세요. 누락 시 설정 안내 화면이 표시됩니다. 터널 변경 시:
+
+```bash
+flutter run --dart-define=BACKEND_URL=https://NEW-TUNNEL.trycloudflare.com
+```
+
+새 합성 담당자 계정을 생성해야 합니다. 기존 고정 체험 계정/Supabase 계정은 실제 서버 로그인에 사용할 수 없습니다. 비밀번호 12~128자. 서버 재시작 시 계정·세션·상담 데이터가 모두 초기화됩니다.
+
+홈에서 합성 대상자 생성 → 이전 상담 작성 → 현재 상담의 합성 시연 음성/이미지 선택 → 실제 인식·교정·확정·저장 → 이전/현재 분석 → 원문 근거 확인 → 검토 제출 → 별도 최종 승인 → 지원 필요와 근거 선택 → 합성 복지 후보 확인 순서입니다.
+
+- [전체 API 연결·프론트/백엔드 차이표](docs/FE_BE_INTEGRATION.md)
+- [실행한 검증과 남은 검증](docs/API_INTEGRATION_VALIDATION.md)
+- [Firebase 기기 알림 설정](docs/FIREBASE_NOTIFICATIONS.md)
+- [기존 디자인 체험 가이드](docs/FLUTTER_DESIGN_PREVIEW.md)
+
+실제 연동이 기본입니다. 기존 역할/가족/관리자 등의 디자인 화면은 `flutter run --dart-define=USE_MOCK=true`로 명시적으로 실행합니다. 네트워크 실패 시 이 모드로 자동 전환하지 않습니다.
+
+현재 서버가 지원하지 않는 가족 연결·운영 직원 승인·프로필 변경·전화/영상 통화 등의 기능은 실제 연동 화면에서 저장 성공으로 표시하지 않습니다. 상세 차이표를 확인하세요. 인앱 수동 알림은 FCM 자동 발송과 다릅니다.
+
+검증:
+
+```bash
+flutter analyze
+flutter test
+flutter build apk --debug
+```
+
+macOS Documents/iCloud 코드서명 문제가 있으면:
+
+```bash
+bash ./run_ios_local.sh "$PWD" -d "iPhone 16"
+```
+
+## 기존 React/Vite 웹
+
+이 작업에서 웹 소스·패키지 설정은 변경하지 않았습니다. 설치·실행 절차는 [기존 웹 README](docs/WEB_README.md)와 [협업 안내](CONTRIBUTING.md)를 참고하세요.
+
+```bash
+pnpm install --frozen-lockfile
+pnpm --filter @caregap/web dev
+```
+
+웹의 API 프록시·CORS·실제 업무 화면 연결은 모바일 연동과 별도입니다. 이번 Flutter 검증을 웹 검증으로 간주하지 마세요.
+
+## 보안 및 합성 시연
+
+실제 개인정보·상담 녹음을 사용하지 마세요. AI 결과는 검토가 필요한 참고 정보이며 복지 후보는 합성/자격 미확인/실제 신청 불가입니다. 서버 저장은 비영구 메모리입니다. `.env`·APNs p8·서비스 계정 비밀키·서명키를 커밋하지 마세요. Firebase 클라이언트 설정 파일은 서버 비밀 키와 다릅니다.
