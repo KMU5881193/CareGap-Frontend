@@ -44,6 +44,7 @@ dependencies:
   firebase_core: ^4.0.0
   firebase_messaging: ^16.0.0
   shared_preferences: ^2.5.6
+  http: ^1.6.0
 
 dev_dependencies:
   flutter_native_splash: ^2.4.8
@@ -71,6 +72,7 @@ flutter:
   assets:
     - assets/fonts/PRETENDARD_LICENSE.txt
     - assets/images/
+    - assets/demo/
 
 
   # The following line ensures that the Material Icons font is

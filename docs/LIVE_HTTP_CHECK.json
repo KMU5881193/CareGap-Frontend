@@ -1,0 +1,34 @@
+{
+  "base": "https://favourite-bizrate-passed-calibration.trycloudflare.com",
+  "checks": [
+    "health · 합성 전용 서버",
+    "회원가입 → 로그인 → me",
+    "대상자 생성 · 목록",
+    "예약 생성",
+    "예약 완료",
+    "새 기록 버전",
+    "오래된 기록 버전 409 차단",
+    "STT 작업 생성",
+    "미확정 STT 가져오기 차단",
+    "실제 STT 인식 성공",
+    "STT 교정 → 확정 → 기록 가져오기",
+    "실제 상담 비교 분석 성공",
+    "LLM 제공자 확인",
+    "이전·현재 근거 반환",
+    "미승인 복지 추천 차단",
+    "검토 제출",
+    "검토 승인",
+    "복지 후보 · 합성/자격 미확인",
+    "기록 이력 · 후속 업무 · 알림 목록",
+    "후속 업무 완료 · 알림 읽음",
+    "로그아웃 · 로컬 토큰 제거"
+  ],
+  "completed": true,
+  "stt_provider": "injected",
+  "provider": {
+    "provider": "ollama",
+    "model": "qwen2.5vl:7b",
+    "prompt_version": "caregap-temporal-v2"
+  },
+  "checked_at": "2026-10-29T20:20:37.743917Z"
+}

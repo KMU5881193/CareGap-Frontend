@@ -18,7 +18,9 @@ void main() {
 
   testWidgets('큰 글씨에서 시작→역할 선택→체험 가입 화면을 스크롤할 수 있다', (tester) async {
     smallScreen(tester);
-    await tester.pumpWidget(const CaregapApp());
+    await tester.pumpWidget(
+      CaregapApp(controller: AppController(MockCareRepository())),
+    );
     await tester.ensureVisible(find.text('시작하기'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('시작하기'));
@@ -64,7 +66,9 @@ void main() {
   }
 
   testWidgets('체험 로그인 후 인증된 대상자 홈으로 이동한다', (tester) async {
-    await tester.pumpWidget(const CaregapApp());
+    await tester.pumpWidget(
+      CaregapApp(controller: AppController(MockCareRepository())),
+    );
     await tester.ensureVisible(find.text('로그인'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('로그인'));

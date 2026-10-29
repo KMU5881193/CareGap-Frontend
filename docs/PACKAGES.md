@@ -24,3 +24,7 @@ UI 애니메이션과 상태 관리는 Flutter 내장 기능으로 구현해 별
 
 ## Firebase 알림 (2026-10-30)
 공식 Firebase Core 4.15.2 / Messaging 16.7.1을 사용한다. 기존 FCM 토큰 계약을 유지하는 계열이며 17의 FID 등록 전환은 별도 검토한다. shared_preferences 2.5.6은 기기 알림 켜기 선택만 저장한다. 모두 BSD-3-Clause이며 docs/licenses에 원문을 포함했다. 설정/검증/백엔드 역할은 FIREBASE_NOTIFICATIONS.md 참고.
+
+
+## 실제 HTTP 연동
+Dart 팀이 관리하는 http 패키지를 직접 의존성으로 사용한다. ApiClient의 실제 네트워크 경계와 테스트용 MockClient 주입을 분리하기 위해 선택했다. BSD-3-Clause 원문은 docs/licenses/http.txt에 포함했다. FCM·미디어 의존성은 유지한다.

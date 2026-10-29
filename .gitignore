@@ -65,3 +65,6 @@ firebase-debug*.log
 **/service-account*.json
 **/serviceAccount*.json
 **/*firebase-adminsdk*.json
+
+# Kotlin incremental build cache
+/android/.kotlin/
