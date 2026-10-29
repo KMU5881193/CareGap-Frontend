@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 
 import '../core/config/app_config.dart';
 import '../core/data/mock_care_repository.dart';
+import '../core/data/live_care_repository.dart';
+import '../core/api/api_client.dart';
+import '../features/live/presentation/live_shell_page.dart';
 import '../core/notifications/push_service.dart';
 import '../features/notifications/presentation/pages/notification_settings_page.dart';
 import '../features/auth/presentation/pages/welcome_page.dart';
@@ -25,7 +28,13 @@ class CaregapApp extends StatefulWidget {
 }
 
 class _CaregapAppState extends State<CaregapApp> with WidgetsBindingObserver {
-  late final app = widget.controller ?? AppController(MockCareRepository());
+  late final app =
+      widget.controller ??
+      AppController(
+        AppConfig.useMock
+            ? MockCareRepository()
+            : LiveCareRepository(ApiClient(AppConfig.backendUrl)),
+      );
   final navigator = GlobalKey<NavigatorState>();
   final messenger = GlobalKey<ScaffoldMessengerState>();
   int _foregroundRevision = 0;
@@ -34,6 +43,12 @@ class _CaregapAppState extends State<CaregapApp> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    if (app.repository case final LiveCareRepository repo) {
+      repo.api.onUnauthorized = () {
+        repo.clearData();
+        app.expireSession();
+      };
+    }
     PushService.instance.addListener(_onPush);
     app.addListener(_onPush);
     WidgetsBinding.instance.addPostFrameCallback((_) => _onPush());
@@ -134,19 +149,7 @@ class _CaregapAppState extends State<CaregapApp> with WidgetsBindingObserver {
             ),
           );
         },
-        home: !AppConfig.useMock
-            ? const Scaffold(
-                body: SafeArea(
-                  child: PageBody(
-                    children: [
-                      InfoPanel(
-                        '실제 서비스 연결이 아직 설정되지 않았습니다. 실제 API 명세에 맞춘 연동이 필요합니다.',
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            : const _SessionGate(),
+        home: const _SessionGate(),
       ),
     ),
   );
@@ -179,6 +182,7 @@ class _SessionGate extends StatelessWidget {
     }
     if (app.restricted) return const AccessRestrictedPage();
     if (app.needsTarget) return const BeneficiarySelectionPage();
+    if (app.repository is LiveCareRepository) return const LiveShellPage();
     return const MainShellPage();
   }
 }
