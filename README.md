@@ -13,3 +13,5 @@ Backend docs/contracts.md 및 docs/openapi.yaml을 공동 검토하세요.
 완전히 새로 시작하는 프로젝트입니다. 기존 Next.js CareGap·caregap-camera-poc은 아이디어/요구사항 참고 자료일 뿐 코드·설정 복사 기반이 아닙니다.
 팀 표준 프론트/백엔드 포트는 아직 미정입니다. Vite 자체 기본 개발 포트는 5173이며 충돌 시 다음 사용 가능한 포트를 시도합니다. 이는 프레임워크 동작 설명이며 팀 고정값이 아닙니다.
 필요하면 pnpm --filter @caregap/web dev --port <선택한-로컬-포트>로 일회성 지정하세요. Playwright는 Vite port: 0으로 운영체제가 할당한 임시 포트를 사용하고 종료 시 서버를 닫습니다.
+
+초대 없이 참여하는 Fork/PR 절차와 직접 Push 권한의 차이는 [CONTRIBUTING.md](CONTRIBUTING.md)를 참고하세요. 출처·포트 감사표는 [docs/initialization-audit.md](docs/initialization-audit.md)에 있습니다.
