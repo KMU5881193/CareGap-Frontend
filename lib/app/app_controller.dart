@@ -150,10 +150,25 @@ class AppController extends ChangeNotifier {
     loading = false;
     notifyListeners();
     PushService.instance.consumeOpen();
-    if (PushService.instance.enabled) {
-      await PushService.instance.setEnabled(false);
-    }
-    await repository.logout();
+    await Future.wait([
+      repository.logout(),
+      if (PushService.instance.enabled) PushService.instance.setEnabled(false),
+    ]);
+  }
+
+  void expireSession() {
+    ++_generation;
+    user = null;
+    data = null;
+    linkedPeople = [];
+    selectedTargetId = null;
+    workspaceReady = false;
+    loading = false;
+    error = const AppException(
+      '로그인이 만료됐어요. 서버가 재시작됐다면 다시 가입해 주세요.',
+      code: '401',
+    );
+    notifyListeners();
   }
 
   void setFontScale(double value) {
