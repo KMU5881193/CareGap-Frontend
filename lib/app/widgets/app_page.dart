@@ -1,3 +1,5 @@
+import '../../core/data/live_care_repository.dart';
+
 import 'package:flutter/material.dart';
 
 import '../care_scope.dart';
@@ -130,7 +132,9 @@ class DemoBanner extends StatelessWidget {
     color: const Color(0xFFF0F7F3),
     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
     child: Text(
-      '체험 데이터 · 실제 서버에 전송되지 않습니다',
+      CareScope.of(context).repository is LiveCareRepository
+          ? '합성 전용 · 실제 서버 연결 · 재시작 시 자료 초기화'
+          : '체험 데이터 · 실제 서버에 전송되지 않습니다',
       textAlign: TextAlign.center,
       style: Theme.of(context).textTheme.labelSmall
           ?.copyWith(fontSize: 10, color: AppColors.textSecondary),
