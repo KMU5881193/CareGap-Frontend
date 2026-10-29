@@ -246,6 +246,26 @@ class _LiveMediaPageState extends State<LiveMediaPage>
                     }
                   }),
           ),
+          if (source == 'ocr') ...[
+            const SizedBox(height: 12),
+            AppButton(
+              label: '카메라로 촬영',
+              icon: Icons.photo_camera_outlined,
+              onPressed: busy || capture.recording
+                  ? null
+                  : () => perform(() async {
+                      final next = await MediaSelectionService.instance
+                          .selectImage(camera: true);
+                      if (next != null && mounted) {
+                        validateUpload(source, next);
+                        setState(() {
+                          file = next;
+                          key = requestKey();
+                        });
+                      }
+                    }),
+            ),
+          ],
           if (source == 'stt') ...[
             const SizedBox(height: 12),
             AppButton(

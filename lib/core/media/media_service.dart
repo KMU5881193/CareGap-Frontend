@@ -29,10 +29,10 @@ class MediaSelectionService {
     final file = await openFile(
       acceptedTypeGroups: const [
         XTypeGroup(
-          label: '음성 파일',
-          extensions: ['wav', 'm4a', 'aac', 'mp3'],
-          mimeTypes: ['audio/*'],
-          uniformTypeIdentifiers: ['public.audio'],
+          label: 'WAV 음성 파일',
+          extensions: ['wav'],
+          mimeTypes: ['audio/wav', 'audio/x-wav'],
+          uniformTypeIdentifiers: ['com.microsoft.waveform-audio'],
         ),
       ],
     );

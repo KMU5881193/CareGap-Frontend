@@ -186,6 +186,10 @@ void main() {
     ]) {
       navigator.push(MaterialPageRoute<void>(builder: (_) => page));
       await tester.pumpAndSettle();
+      if (page is LiveMediaPage && page.source == 'ocr') {
+        expect(find.text('카메라로 촬영'), findsOneWidget);
+        expect(find.text('실제 인식 요청'), findsNothing);
+      }
       expect(
         tester.takeException(),
         isNull,
