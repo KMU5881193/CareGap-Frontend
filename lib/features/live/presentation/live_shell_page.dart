@@ -8,6 +8,8 @@ import '../../../core/data/live_care_repository.dart';
 import '../../notifications/presentation/pages/notification_settings_page.dart';
 import '../../settings/presentation/pages/accessibility_page.dart';
 import 'live_record_page.dart';
+import '../../calls/presentation/call_page.dart';
+import '../../calls/presentation/recording_library_page.dart';
 import 'live_analysis_page.dart';
 
 class LiveShellPage extends StatefulWidget {
@@ -36,7 +38,7 @@ class _LiveShellPageState extends State<LiveShellPage> {
     if (!r.persons.any((p) => p['person_id'] == selected)) {
       selected = r.persons.firstOrNull?['person_id'];
     }
-    final titles = ['돌봄틈새 AI', '상담 일정', '상담 기록', '복지 후보', '더보기'];
+    final titles = ['케어노트', '상담 일정', '상담 기록', '복지 후보', '더보기'];
     return AppPage(
       title: titles[index],
       titleWidget: index == 0 ? const AppBrand(size: 30) : null,
@@ -147,6 +149,12 @@ class _LiveShellPageState extends State<LiveShellPage> {
           subtitle: '${repo.tasks.where((t) => t['status'] == 'open').length}건',
           icon: Icons.checklist,
           onTap: () => openPage(context, const LiveTasksPage()),
+        ),
+        QuickTile(
+          title: '음성 상담',
+          icon: Icons.call_outlined,
+          subtitle: '통화·녹음 보관함',
+          onTap: () => openPage(context, const CallPage()),
         ),
         QuickTile(
           title: '서버 연결 확인',
@@ -313,6 +321,14 @@ class _LiveShellPageState extends State<LiveShellPage> {
                         task(() => repo.bookingAction(a, 'complete')),
                     child: const Text('상담 완료'),
                   ),
+                  TextButton.icon(
+                    onPressed: () => openPage(
+                      context,
+                      CallPage(appointmentId: a['appointment_id']),
+                    ),
+                    icon: const Icon(Icons.call_outlined),
+                    label: const Text('음성 상담'),
+                  ),
                   TextButton(
                     onPressed: () async {
                       if (await confirmCare(context, '예약 취소', '이 예약을 취소할까요?')) {
@@ -417,6 +433,22 @@ class _LiveShellPageState extends State<LiveShellPage> {
       child: const ListTile(
         leading: Icon(Icons.accessibility_new),
         title: Text('접근성 설정'),
+      ),
+    ),
+    AppCard(
+      onTap: () => openPage(context, const CallPage()),
+      child: const ListTile(
+        leading: Icon(Icons.call_outlined),
+        title: Text('음성 상담'),
+        subtitle: Text('통화 서버 연결 준비'),
+      ),
+    ),
+    AppCard(
+      onTap: () => openPage(context, RecordingLibraryPage(personId: selected)),
+      child: const ListTile(
+        leading: Icon(Icons.graphic_eq),
+        title: Text('녹음 · 전사 보관함'),
+        subtitle: Text('WAV 저장·재생·내보내기'),
       ),
     ),
     const SizedBox(height: 16),

@@ -71,7 +71,7 @@ class NotificationSettingsPage extends StatelessWidget {
               ),
             const SizedBox(height: 12),
             const InfoPanel(
-              '기기 설정에서 알림을 거부했다면 iPhone 설정 → 알림 또는 Android 설정 → 앱 → 돌봄틈새 AI → 알림에서 허용해 주세요.',
+              '기기 설정에서 알림을 거부했다면 iPhone 설정 → 알림 또는 Android 설정 → 앱 → 케어노트 → 알림에서 허용해 주세요.',
             ),
             const SizedBox(height: 20),
             const SectionTitle('받고 싶은 소식'),

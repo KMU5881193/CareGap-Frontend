@@ -49,4 +49,3 @@ class HandoverRequest {
   final String recordId, receiver;
   final DateTime requestedAt;
 }
-//

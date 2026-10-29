@@ -20,7 +20,7 @@ class AppBrand extends StatelessWidget {
         const SizedBox(width: 7),
         Flexible(
           child: Text(
-            '돌봄틈새 AI',
+            '케어노트',
             style: TextStyle(
               color: AppColors.primaryDark,
               fontSize: size * .65,

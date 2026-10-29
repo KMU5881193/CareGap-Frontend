@@ -21,7 +21,7 @@ class _MainShellPageState extends State<MainShellPage> {
   @override
   Widget build(BuildContext context) {
     final app = CareScope.of(context);
-    const titles = ['돌봄틈새 AI', '상담 일정', '상담 기록', '복지 정보', '더보기'];
+    const titles = ['케어노트', '상담 일정', '상담 기록', '복지 정보', '더보기'];
     final pages = [
       app.isStaff ? const StaffHomePage() : const BeneficiaryHomePage(),
       const CalendarPage(),

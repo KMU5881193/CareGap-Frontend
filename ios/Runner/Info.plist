@@ -5,13 +5,13 @@
 	<key>FirebaseMessagingAutoInitEnabled</key>
 	<false/>
 	<key>UIBackgroundModes</key>
-	<array><string>fetch</string><string>remote-notification</string></array>
+	<array><string>fetch</string><string>remote-notification</string><string>audio</string></array>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>돌봄틈새 AI</string>
+	<string>케어노트</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -19,7 +19,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>caregap_app</string>
+	<string>케어노트</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>

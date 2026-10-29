@@ -77,6 +77,7 @@ abstract final class AppTheme {
         scrolledUnderElevation: 0,
         centerTitle: false,
         titleTextStyle: TextStyle(
+          fontFamily: 'Pretendard',
           color: AppColors.textPrimary,
           fontSize: 20,
           fontWeight: FontWeight.w600,

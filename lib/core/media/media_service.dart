@@ -68,6 +68,8 @@ class MediaSelectionService {
 }
 
 class AudioCapture extends ChangeNotifier {
+  final _frames = StreamController<Uint8List>.broadcast(sync: true);
+  Stream<Uint8List> get frames => _frames.stream;
   AudioRecorder? _recorder;
   AudioRecorder get recorder => _recorder ??= AudioRecorder();
   final _chunks = <Uint8List>[];
@@ -100,7 +102,11 @@ class AudioCapture extends ChangeNotifier {
     );
     recording = true;
     _subscription = stream.listen(
-      _chunks.add,
+      (part) {
+        final copy = Uint8List.fromList(part);
+        _chunks.add(copy);
+        if (!_disposed) _frames.add(copy);
+      },
       onError: (Object e) {
         error = '녹음 중 오류가 발생했어요. 다시 시도해 주세요.';
         stop();
@@ -171,6 +177,7 @@ class AudioCapture extends ChangeNotifier {
     _timer?.cancel();
     _subscription?.cancel();
     _recorder?.dispose();
+    _frames.close();
     super.dispose();
   }
 }

@@ -77,7 +77,7 @@ class _CaregapAppState extends State<CaregapApp> with WidgetsBindingObserver {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
         messenger.currentState?.showSnackBar(
-          const SnackBar(content: Text('돌봄틈새 AI 알림이 도착했어요. 앱에서 내용을 확인해 주세요.')),
+          const SnackBar(content: Text('케어노트 알림이 도착했어요. 앱에서 내용을 확인해 주세요.')),
         );
       });
     }
@@ -117,7 +117,7 @@ class _CaregapAppState extends State<CaregapApp> with WidgetsBindingObserver {
       builder: (context, _) => MaterialApp(
         navigatorKey: navigator,
         scaffoldMessengerKey: messenger,
-        title: '돌봄틈새 AI',
+        title: '케어노트',
         locale: const Locale('ko', 'KR'),
         supportedLocales: const [Locale('ko', 'KR')],
         localizationsDelegates: GlobalMaterialLocalizations.delegates,

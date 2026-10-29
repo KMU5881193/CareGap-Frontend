@@ -17,8 +17,15 @@ class LiveMediaPage extends StatefulWidget {
     super.key,
     required this.personId,
     required this.source,
+    this.initialFile,
+    this.initialJobId,
+    this.initialRequestKey,
+    this.onJobCreated,
   });
   final String personId, source;
+  final MediaInput? initialFile;
+  final String? initialJobId, initialRequestKey;
+  final Future<void> Function(Json job)? onJobCreated;
   @override
   State<LiveMediaPage> createState() => _LiveMediaPageState();
 }
@@ -43,6 +50,17 @@ class _LiveMediaPageState extends State<LiveMediaPage>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     capture.addListener(captured);
+    file = widget.initialFile;
+    key = widget.initialRequestKey ?? key;
+    if (widget.initialJobId != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          perform(() async {
+            adopt(await repo.getJob(source, widget.initialJobId!));
+          });
+        }
+      });
+    }
   }
 
   void captured() {
@@ -216,7 +234,10 @@ class _LiveMediaPageState extends State<LiveMediaPage>
                       }
                       if (mounted) {
                         setState(() => adopt(value));
-                        if (['pending', 'processing'].contains(value['status'])) {
+                        if ([
+                          'pending',
+                          'processing',
+                        ].contains(value['status'])) {
                           timer = Timer.periodic(
                             const Duration(seconds: 2),
                             (_) => poll(),
@@ -291,6 +312,7 @@ class _LiveMediaPageState extends State<LiveMediaPage>
                       );
                       if (!mounted) return;
                       setState(() => adopt(next));
+                      await widget.onJobCreated?.call(next);
                       polls = 0;
                       timer = Timer.periodic(
                         const Duration(seconds: 2),

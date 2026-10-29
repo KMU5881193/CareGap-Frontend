@@ -72,6 +72,7 @@ class _AppButtonState extends State<AppButton> {
               foregroundColor: Colors.white,
               minimumSize: const Size(48, 50),
               textStyle: const TextStyle(
+                fontFamily: 'Pretendard',
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
               ),
@@ -85,6 +86,7 @@ class _AppButtonState extends State<AppButton> {
               foregroundColor: AppColors.primaryDark,
               minimumSize: const Size(48, 50),
               textStyle: const TextStyle(
+                fontFamily: 'Pretendard',
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),

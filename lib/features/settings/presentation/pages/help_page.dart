@@ -12,7 +12,7 @@ class HelpPage extends StatelessWidget {
       children: [
         const SoftBanner(
           title: '무엇을 도와드릴까요?',
-          message: '돌봄틈새 AI 이용 방법을 안내합니다.',
+          message: '케어노트 이용 방법을 안내합니다.',
           asset: 'ai_guide_v1.png',
         ),
         const SectionTitle('자주 묻는 질문'),
@@ -64,7 +64,7 @@ class HelpPage extends StatelessWidget {
             final text = await askText(context, '오류 설명', label: '발생 화면과 재현 방법');
             if (text == null || !context.mounted) return;
             await Clipboard.setData(
-              ClipboardData(text: '돌봄틈새 AI 체험 오류\n$text'),
+              ClipboardData(text: '케어노트 체험 오류\n$text'),
             );
             if (context.mounted) {
               toast(context, '오류 설명을 복사했어요. 외부로 전송되지 않았습니다.');

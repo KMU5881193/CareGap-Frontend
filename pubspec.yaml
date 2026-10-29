@@ -45,6 +45,9 @@ dependencies:
   firebase_messaging: ^16.0.0
   shared_preferences: ^2.5.6
   http: ^1.6.0
+  livekit_client: ^2.13.2
+  path_provider: ^2.1.5
+  share_plus: ^13.3.1
 
 dev_dependencies:
   flutter_native_splash: ^2.4.8

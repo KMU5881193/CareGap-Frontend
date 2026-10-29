@@ -32,7 +32,7 @@ class WelcomePage extends StatelessWidget {
                       ),
                       const SizedBox(height: 10),
                       const Text(
-                        '돌봄틈새 AI',
+                        '케어노트',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 28,

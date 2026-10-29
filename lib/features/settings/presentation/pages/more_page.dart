@@ -65,7 +65,7 @@ class MorePage extends StatelessWidget {
                     ),
                     const SizedBox(height: 5),
                     Text(
-                      '${user.role.label} · 돌봄틈새 AI와 함께\n오늘도 좋은 하루 보내세요! 🌿',
+                      '${user.role.label} · 케어노트와 함께\n오늘도 좋은 하루 보내세요! 🌿',
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],
@@ -142,7 +142,7 @@ class MorePage extends StatelessWidget {
           '오픈소스 라이선스',
           '앱이 사용하는 오픈소스를 확인합니다.',
           Icons.description_outlined,
-          const LicensePage(applicationName: '돌봄틈새 AI'),
+          const LicensePage(applicationName: '케어노트'),
         ),
         const SizedBox(height: 8),
         AsyncActionButton(
