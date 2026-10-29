@@ -80,3 +80,5 @@ playwright-report/
 test-results/
 
 /android/build/
+.runtime/
+flutter-tests*.jsonl

@@ -9,6 +9,8 @@ import '../../notifications/presentation/pages/notification_settings_page.dart';
 import '../../settings/presentation/pages/accessibility_page.dart';
 import 'live_record_page.dart';
 import 'live_analysis_page.dart';
+import 'live_patient_page.dart';
+import '../../../core/models/user_role.dart';
 
 class LiveShellPage extends StatefulWidget {
   const LiveShellPage({super.key});
@@ -33,6 +35,7 @@ class _LiveShellPageState extends State<LiveShellPage> {
   @override
   Widget build(BuildContext context) {
     final app = CareScope.of(context), r = repo;
+    if (r.user?.role == UserRole.beneficiary) return const LivePatientPage();
     if (!r.persons.any((p) => p['person_id'] == selected)) {
       selected = r.persons.firstOrNull?['person_id'];
     }

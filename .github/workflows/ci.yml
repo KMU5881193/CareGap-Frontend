@@ -13,6 +13,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
       - run: pnpm test
+      - run: node --test scripts/demo-login-alias.test.mjs
       - run: pnpm build
       - run: pnpm --filter @caregap/web exec playwright install --with-deps chromium
       - run: pnpm test:e2e
