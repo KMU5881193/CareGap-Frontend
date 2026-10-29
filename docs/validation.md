@@ -8,3 +8,9 @@
 - TypeScript 7에서 제거된 baseUrl을 제거하고 상대 paths 별칭 사용.
 - 서비스워커 자동 등록 보류. 실제 모바일 설치/권한·카메라·녹음·푸시·로그인/업무 API는 미검증/미구현.
 - CI는 별도 GitHub Actions 결과를 확인하세요.
+
+## 포트 정정 검증
+
+- 타입 검사, 화면 테스트 1개, 빌드, Vite가 임시 포트를 할당하는 Playwright 테스트 1개 PASS.
+- 이전 고정 포트 서버를 재사용하지 않으며, 테스트 fixture가 기동한 서버만 종료합니다.
+- 파일별 출처와 정정 내역은 initialization-audit.md 참고.
