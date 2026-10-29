@@ -43,3 +43,8 @@ flutter run --dart-define=BACKEND_URL=https://favourite-bizrate-passed-calibrati
 Mac은 iCloud 밖 작업 복사본에서 실기기 우선, 에뮬레이터 중복 실행 피하기. run_ios_local.sh는 FLUTTER_ROOT 또는 PATH를 사용한다.
 Android applicationId com.example.caregap_app 및 debug 서명은 시연용이다. 정식 스토어 배포 불가; 팀 앱ID·release 서명 확정 필요. 비밀키/토큰을 기록하지 않았다.
 PR과 빌드 최종 결과는 아래 후속 기록에 기재한다. CI 및 실제기기 검증이 끝나기 전 main 병합 안전 완료로 선언하지 않는다.
+
+## 최종 PR 및 플랫폼 판정
+FE PR: https://github.com/KMU5881193/CareGap-Frontend/pull/2 (Draft). 구현 검증 커밋 d7816b9.
+로컬 doctor: Android SDK35만 설치, 요구SDK36 부족 및 일부 라이선스 미수락. APK assembleDebug를 실제 요청했으나 아직 성공 결과가 없어 미검증이다. iOS는 Windows에서 빌드 불가. GitHub CI 및 Flutter verification 실행 중.
+React/Vite 보존 YES, Flutter analyze/test YES, 실제 AI HTTP 전체 흐름 YES. Android/iOS 빌드 성공 및 실제기기 통합 성공은 이번 검증에서 선언하지 않는다. 현재 main 즉시 병합 안전 판정은 NO이며 CI·플랫폼 확인 후 리뷰가 필요하다. main 직접 push/merge는 하지 않았다.
