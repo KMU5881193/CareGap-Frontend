@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../app/care_scope.dart';
 import '../../../app/widgets/app_widgets.dart';
 import '../../../core/models/user_role.dart';
+import '../../../core/data/live_care_repository.dart';
 
 class LiveAuthPage extends StatefulWidget {
   const LiveAuthPage({super.key, this.register = false});
@@ -39,6 +40,9 @@ class _LiveAuthPageState extends State<LiveAuthPage> {
           '현재 서버는 합성 시연용 담당자만 지원합니다. 실제 개인정보를 입력하지 마세요. 서버 재시작 시 계정과 기록이 초기화됩니다.',
         ),
         const SizedBox(height: 24),
+        SelectableText(
+          '연결 주소: ${(CareScope.of(context).repository as LiveCareRepository).api.base.origin}',
+        ),
         Form(
           key: form,
           child: Column(

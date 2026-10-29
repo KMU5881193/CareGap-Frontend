@@ -4,12 +4,12 @@
 현재 Flutter 프로젝트를 실제 통합 HTTP 서버에 연결했다. React/Vite의 프록시 코드는 Flutter에 넣지 않았다. Android/iOS 네이티브 앱은 HTTPS를 직접 호출하며 브라우저 Origin을 임의 조작하지 않는다. Flutter Web은 서버 Origin 허용 또는 별도 같은 출처 프록시가 필요하며 이번 검증 대상이 아니다.
 
 ```bash
-cd "/Users/seonghun/Documents/Codex/2026-10-29/24-1-api/caregap_app"
+cd <프로젝트-경로>
 flutter pub get
 flutter run
 ```
 
-기본 서버는 `https://favourite-bizrate-passed-calibration.trycloudflare.com`이다. 터널이 바뀌면:
+기본 서버 주소는 비어 있으며 최신 BACKEND_URL 지정이 필요하다. 터널이 바뀌면:
 
 ```bash
 flutter run --dart-define=BACKEND_URL=https://NEW-TUNNEL.trycloudflare.com

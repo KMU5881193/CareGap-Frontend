@@ -10,9 +10,13 @@ import 'package:caregap_app/core/models/user_role.dart';
 import 'package:caregap_app/core/errors/app_exception.dart';
 
 Future<void> main(List<String> args) async {
-  final url = args.isEmpty
-      ? 'https://favourite-bizrate-passed-calibration.trycloudflare.com'
-      : args[0];
+  if (args.isEmpty) {
+    throw ArgumentError(
+      'Provide current HTTPS BACKEND_URL and optional synthetic WAV path',
+    );
+  }
+  final url = args[0];
+  final elapsed = Stopwatch()..start();
   final report = <String, Object?>{
     'base': url,
     'checks': <String>[],
@@ -120,7 +124,35 @@ Future<void> main(List<String> args) async {
     check(analysis['status'] == 'succeeded', '실제 상담 비교 분석 성공');
     check(analysis['provider_kind'] == 'llm', 'LLM 제공자 확인');
     report['provider'] = analysis['provider_metadata'];
+    report['inference'] = analysis['inference'];
+    check(
+      analysis['provider_metadata']?['provider'] == 'ollama' &&
+          analysis['inference']?['model'] == 'qwen2.5vl:7b' &&
+          (analysis['inference']?['eval_count'] as num? ?? 0) > 0,
+      '실제 Qwen 추론 메타데이터',
+    );
     final findings = objects(object(analysis['edited'])['findings']);
+    check(
+      findings.length == 3 && findings.every((f) => f['change'] == 'improved'),
+      '독립 합성 정답: 식사·복약·산책 개선',
+    );
+    for (final finding in findings) {
+      for (final evidence in objects(finding['evidence'])) {
+        final source = [revised, current].where(
+          (r) =>
+              r['consultation_id'] == evidence['consultation_id'] &&
+              r['record_version_id'] == evidence['record_version_id'],
+        );
+        check(
+          source.length == 1 &&
+              (evidence['quote'] as String).isNotEmpty &&
+              (source.single['text'] as String).contains(
+                evidence['quote'] as String,
+              ),
+          '근거 ID·버전·정확한 원문 일치',
+        );
+      }
+    }
     check(
       findings.isNotEmpty && objects(findings.first['evidence']).length >= 2,
       '이전·현재 근거 반환',
@@ -151,11 +183,12 @@ Future<void> main(List<String> args) async {
       },
     ]);
     check(
-      objects(welfare['candidates']).every(
-        (c) =>
-            c['eligibility_status'] == 'unverified' &&
-            c['data_status'] == 'synthetic_demo',
-      ),
+      objects(welfare['candidates']).isNotEmpty &&
+          objects(welfare['candidates']).every(
+            (c) =>
+                c['eligibility_status'] == 'unverified' &&
+                c['data_status'] == 'synthetic_demo',
+          ),
       '복지 후보 · 합성/자격 미확인',
     );
     await r.addFollowup(id, '합성 식사 상태 재확인');
@@ -187,7 +220,9 @@ Future<void> main(List<String> args) async {
   } finally {
     r.api.close();
     report['checked_at'] = DateTime.now().toUtc().toIso8601String();
-    final f = File('/private/tmp/caregap_live_api_report.json');
+    report['elapsed_ms'] = elapsed.elapsedMilliseconds;
+    final f = File('${Directory.systemTemp.path}/caregap_live_api_report.json');
     await f.writeAsString(const JsonEncoder.withIndent('  ').convert(report));
+    stdout.writeln('Report: ${f.path}');
   }
 }

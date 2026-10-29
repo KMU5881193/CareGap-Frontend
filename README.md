@@ -11,7 +11,7 @@ flutter pub get
 flutter run
 ```
 
-기본 서버: `https://favourite-bizrate-passed-calibration.trycloudflare.com`. 터널 변경 시:
+임시 주소를 앱에 고정하지 않습니다. 최신 HTTPS 주소를 반드시 지정하세요. 누락 시 설정 안내 화면이 표시됩니다. 터널 변경 시:
 
 ```bash
 flutter run --dart-define=BACKEND_URL=https://NEW-TUNNEL.trycloudflare.com

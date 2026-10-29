@@ -5,8 +5,12 @@ import '../models/frontend_models.dart';
 
 void validateUpload(String source, MediaInput file) {
   final b = file.bytes;
-  if (b.isEmpty || b.length > 10 * 1024 * 1024) {
-    throw const AppException('파일은 10MB 이하로 선택해 주세요.');
+  if (!['ocr', 'stt'].contains(source)) {
+    throw const AppException('지원하지 않는 인식 종류입니다.');
+  }
+  final limit = source == 'ocr' ? 5 : 10;
+  if (b.isEmpty || b.length > limit * 1024 * 1024) {
+    throw AppException('파일은 ${limit}MB 이하로 선택해 주세요.');
   }
   if (source == 'ocr') {
     final png =
@@ -30,6 +34,9 @@ void validateUpload(String source, MediaInput file) {
     );
   }
   final data = ByteData.sublistView(b);
+  if (data.getUint32(4, Endian.little) + 8 != b.length) {
+    throw const AppException('WAV 파일 길이 정보가 일치하지 않습니다.');
+  }
   bool format = false, audio = false;
   for (int at = 12; at + 8 <= b.length;) {
     final size = data.getUint32(at + 4, Endian.little), start = at + 8;
@@ -39,6 +46,8 @@ void validateUpload(String source, MediaInput file) {
           data.getUint16(start, Endian.little) != 1 ||
           data.getUint16(start + 2, Endian.little) != 1 ||
           data.getUint32(start + 4, Endian.little) != 16000 ||
+          data.getUint32(start + 8, Endian.little) != 32000 ||
+          data.getUint16(start + 12, Endian.little) != 2 ||
           data.getUint16(start + 14, Endian.little) != 16) {
         throw const AppException('16kHz·모노·PCM16 WAV만 전송할 수 있습니다.');
       }

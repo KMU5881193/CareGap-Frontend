@@ -48,6 +48,7 @@ class ApiClient {
     if (base.scheme != 'https' ||
         base.host.isEmpty ||
         base.userInfo.isNotEmpty ||
+        (base.path.isNotEmpty && base.path != '/') ||
         base.hasQuery ||
         base.hasFragment) {
       throw const AppException('HTTPS 백엔드 주소를 확인해 주세요.', code: 'CONFIG');
@@ -94,6 +95,9 @@ class ApiClient {
           .timeout(const Duration(seconds: 150));
       final response = await http.Response.fromStream(streamed)
           .timeout(const Duration(seconds: 30));
+      if (response.statusCode == 401 && auth && token == sessionToken) {
+        _expire();
+      }
       if (response.statusCode == 204) return null;
       dynamic payload;
       try {
@@ -108,9 +112,6 @@ class ApiClient {
         final code = payload is Map
             ? (payload['error'] is Map ? payload['error']['code'] : null)
             : null;
-        if (response.statusCode == 401 && auth && token == sessionToken) {
-          _expire();
-        }
         throw AppException(
           '${_message(response.statusCode, code?.toString())} (${code ?? response.statusCode})',
           code: '${response.statusCode}',

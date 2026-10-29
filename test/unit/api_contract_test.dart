@@ -13,6 +13,52 @@ import 'package:caregap_app/core/media/media_service.dart';
 import 'package:caregap_app/core/models/frontend_models.dart';
 
 void main() {
+  test('malformed 401 JSON still expires the active session', () async {
+    final c = ApiClient(
+      'https://example.test',
+      transport: MockClient((_) async => http.Response('expired', 401)),
+    )..token = 'test-token';
+    int expired = 0;
+    c.onUnauthorized = () => expired++;
+    await expectLater(
+      c.request('GET', '/api/persons'),
+      throwsA(isA<AppException>()),
+    );
+    expect(c.token, isNull);
+    expect(expired, 1);
+    c.close();
+  });
+  test('base URLs cannot hide credentials, paths or query strings', () {
+    for (final url in [
+      'https://user:password@example.test',
+      'https://example.test/api',
+      'https://example.test?token=hidden',
+    ]) {
+      expect(() => ApiClient(url), throwsA(isA<AppException>()));
+    }
+  });
+  test('OCR size matches 5MB backend and WAV rate/size fields must agree', () {
+    final image = Uint8List(5 * 1024 * 1024 + 1)
+      ..setAll(0, [137, 80, 78, 71, 13, 10, 26, 10]);
+    expect(
+      () => validateUpload(
+        'ocr',
+        MediaInput(name: 'large.png', bytes: image, kind: 'image'),
+      ),
+      throwsA(isA<AppException>()),
+    );
+    for (final offset in [4, 28, 32]) {
+      final wav = AudioCapture.makeWav(Uint8List(320));
+      wav[offset] = wav[offset] ^ 1;
+      expect(
+        () => validateUpload(
+          'stt',
+          MediaInput(name: 'bad.wav', bytes: wav, kind: 'audio'),
+        ),
+        throwsA(isA<AppException>()),
+      );
+    }
+  });
   ApiClient client(Future<http.Response> Function(http.Request) handler) =>
       ApiClient('https://example.test', transport: MockClient(handler))
         ..token = 'test-token'
