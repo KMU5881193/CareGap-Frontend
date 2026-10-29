@@ -25,3 +25,15 @@
 `flutter test scripts/live_server_ui_test.dart --dart-define=ALLOW_LOOPBACK_HTTP=true --timeout 90s`
 
 테스트/실행 도구에 비밀번호를 인자로 넣지 않는다. 공개 터널을 통해 자격증명을 전송하지 않는다.
+
+## 외부 접속 추가 검증
+
+사용자 명시 허용 후 새 공개 링크를 추가했다: https://grams-viewing-given-categories.trycloudflare.com/
+
+- 별도 Windows 웹 프록시 4337 → 합성 API 4334. 기존 4335와 4324는 유지했다.
+- `USE_SAME_ORIGIN=true` 빌드로 외부 접속 기기의 localhost를 호출하는 오류를 방지한다.
+- 공개용 빌드: `flutter build web --output=build/web-public --dart-define=USE_MOCK=false --dart-define=USE_SAME_ORIGIN=true`
+- 프록시 환경변수: DEMO_WEB_PORT=4337, DEMO_WEB_ROOT=build/web-public, DEMO_PUBLIC_ORIGIN은 위 정확한 origin.
+- Cloudflare는 HTTP/2 터널로 실행했다. Quick Tunnel 주소는 프로세스 수명에 의존한다.
+- Docker 컨테이너가 아니라 Windows 프로세스이므로 Docker Ports 목록에 나타나지 않는다.
+- 외부 링크에서 Flutter 실제 화면 렌더링과 /health 200을 확인했다. 로그인 정보는 로컬 비밀 파일에서 확인한다.

@@ -1,9 +1,15 @@
 abstract final class AppConfig {
   static const useMock = bool.fromEnvironment('USE_MOCK', defaultValue: false);
-  static const backendUrl = String.fromEnvironment(
+  static const configuredBackendUrl = String.fromEnvironment(
     'BACKEND_URL',
     defaultValue: '',
   );
+  // Public demo bundles call the origin from which they were actually loaded.
+  // This prevents a remote phone from calling its own localhost.
+  static String get backendUrl =>
+      const bool.fromEnvironment('USE_SAME_ORIGIN', defaultValue: false)
+      ? Uri.base.origin
+      : configuredBackendUrl;
   static bool get backendConfigured {
     final uri = Uri.tryParse(backendUrl);
     return uri != null &&
