@@ -7,6 +7,7 @@ import '../../../core/data/live_care_repository.dart';
 import '../../../core/errors/app_exception.dart';
 import 'live_media_page.dart';
 import 'live_analysis_page.dart';
+import 'live_vision_page.dart';
 
 class LiveRecordPage extends StatefulWidget {
   const LiveRecordPage({super.key, required this.personId, this.record});
@@ -45,6 +46,15 @@ class _LiveRecordPageState extends State<LiveRecordPage> {
           if (current == null)
             QuickGrid(
               children: [
+                QuickTile(
+                  title: 'Vision 이미지 직접 분석',
+                  subtitle: '선택 기능 · 사람 검토 필요',
+                  icon: Icons.image_search,
+                  onTap: () => openPage(
+                    context,
+                    LiveVisionPage(personId: widget.personId),
+                  ),
+                ),
                 for (final source in ['ocr', 'stt'])
                   QuickTile(
                     title: source == 'ocr' ? '사진 문자 추출' : '녹음 · 음성 변환',

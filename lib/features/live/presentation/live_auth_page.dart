@@ -25,7 +25,7 @@ class _LiveAuthPageState extends State<LiveAuthPage> {
 
   @override
   Widget build(BuildContext context) => AppPage(
-    title: widget.register ? '합성 담당자 계정 만들기' : '담당자 로그인',
+    title: widget.register ? '합성 담당자 계정 만들기' : '합성 계정 로그인',
     protected: false,
     child: PageBody(
       children: [
@@ -37,7 +37,7 @@ class _LiveAuthPageState extends State<LiveAuthPage> {
         ),
         const SizedBox(height: 16),
         const InfoPanel(
-          '현재 서버는 합성 시연용 담당자만 지원합니다. 실제 개인정보를 입력하지 마세요. 서버 재시작 시 계정과 기록이 초기화됩니다.',
+          '합성 계정만 사용하세요. 역할 지원은 연결 서버에 따라 다릅니다. 예약자 계정은 관리자가 준비한 격리 시연 서버에서 로그인할 수 있습니다. 서버 재시작 시 기록이 사라집니다.',
         ),
         const SizedBox(height: 24),
         SelectableText(

@@ -30,13 +30,13 @@ class LiveCareRepository implements CareRepository {
   Future<Json> health() async =>
       healthData = object(await api.request('GET', '/health', auth: false));
   Future<AppUser> _actor(Json actor, String name) async {
-    if (actor['role'] != 'staff') {
-      throw const AppException('현재 서버는 합성 담당자 계정만 지원합니다.');
+    if (!['staff', 'patient'].contains(actor['role'])) {
+      throw const AppException('현재 서버에서 지원하지 않는 계정 역할입니다.');
     }
     return user = AppUser(
       id: requiredId(actor, 'user_id'),
       name: name,
-      role: UserRole.staff,
+      role: actor['role'] == 'staff' ? UserRole.staff : UserRole.beneficiary,
     );
   }
 
@@ -126,7 +126,34 @@ class LiveCareRepository implements CareRepository {
   }
 
   String label(Object? id) =>
-      '합성 대상자 ${id.toString().substring(0, id.toString().length < 6 ? id.toString().length : 6)}';
+      persons.where((p) => p['person_id'] == id).firstOrNull?['name']
+          as String? ??
+      '합성 대상자 ${shortId(id, 6)}';
+  Future<Json> analyzeImage(
+    String personId,
+    MediaInput file,
+    String key,
+  ) async {
+    final epoch = _epoch;
+    final value = object(
+      await api.request(
+        'POST',
+        '/api/vision/analyses',
+        key: key,
+        body: {
+          'person_id': personId,
+          'filename': file.name,
+          'mimeType': file.bytes.isNotEmpty && file.bytes[0] == 137
+              ? 'image/png'
+              : 'image/jpeg',
+          'base64': base64Encode(file.bytes),
+        },
+      ),
+    );
+    _guard(epoch);
+    return value;
+  }
+
   Future<String> createPerson() async => requiredId(
     object(await api.request('POST', '/api/persons', body: {})),
     'person_id',

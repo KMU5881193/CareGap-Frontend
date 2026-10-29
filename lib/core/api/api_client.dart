@@ -45,7 +45,15 @@ class ApiClient {
   ApiClient(String baseUrl, {http.Client? transport})
     : base = Uri.parse(baseUrl),
       transport = transport ?? http.Client() {
-    if (base.scheme != 'https' ||
+    const localOptIn = bool.fromEnvironment(
+      'ALLOW_LOOPBACK_HTTP',
+      defaultValue: false,
+    );
+    final local =
+        localOptIn &&
+        base.scheme == 'http' &&
+        ['127.0.0.1', 'localhost', '::1'].contains(base.host);
+    if ((base.scheme != 'https' && !local) ||
         base.host.isEmpty ||
         base.userInfo.isNotEmpty ||
         (base.path.isNotEmpty && base.path != '/') ||
