@@ -37,3 +37,15 @@
 - Cloudflare는 HTTP/2 터널로 실행했다. Quick Tunnel 주소는 프로세스 수명에 의존한다.
 - Docker 컨테이너가 아니라 Windows 프로세스이므로 Docker Ports 목록에 나타나지 않는다.
 - 외부 링크에서 Flutter 실제 화면 렌더링과 /health 200을 확인했다. 로그인 정보는 로컬 비밀 파일에서 확인한다.
+
+## 간단한 시연 로그인 (추가 사용자 요청)
+
+새 시연 링크: https://wash-mighty-dust-director.trycloudflare.com/
+
+- staff1: 김민준, staff2: 이서연, user1: 박영희, user2: 최정호.
+- 비밀번호와 upstream 매핑은 `.runtime/demo-login-aliases.json`에만 보관한다. 문서/소스에는 넣지 않는다.
+- 별도 4339 프록시에서 간단 ID를 기존 4334의 정확한 계정으로 연결한다. 기존 사용자 ID·배정·예약·기록은 그대로 유지하며 추가 계정을 만들지 않는다.
+- 기존 4334의 강한 자격증명을 변경하거나 서버를 재시작하지 않는다. 이 간편 로그인은 새 시연 링크에만 적용된다.
+- 파일은 현재 사용자만 읽을 수 있고, 브라우저 번들에 포함하지 않는다. 잘못된 비밀번호·없는 ID·role 주입을 거절하며 분당 로그인 횟수를 제한한다.
+- `DEMO_SHORT_LOGIN=true`를 명시한 시연 빌드만 짧은 로그인 입력을 허용한다. 회원가입의 최소 길이는 그대로 유지한다.
+- 환경: DEMO_WEB_PORT=4339, DEMO_WEB_ROOT=build/web-simple, DEMO_PUBLIC_ORIGIN은 위 URL origin, DEMO_LOGIN_ALIASES_FILE은 로컬 비밀 파일 절대 경로.

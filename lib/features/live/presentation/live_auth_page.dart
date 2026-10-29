@@ -13,6 +13,11 @@ class LiveAuthPage extends StatefulWidget {
 }
 
 class _LiveAuthPageState extends State<LiveAuthPage> {
+  int get minPassword =>
+      !widget.register &&
+          const bool.fromEnvironment('DEMO_SHORT_LOGIN', defaultValue: false)
+      ? 4
+      : 12;
   final id = TextEditingController(), password = TextEditingController();
   final form = GlobalKey<FormState>();
   bool consent = false, busy = false, hidden = true;
@@ -59,7 +64,7 @@ class _LiveAuthPageState extends State<LiveAuthPage> {
               ),
               const SizedBox(height: 20),
               AppTextField(
-                label: '비밀번호 (12~128자)',
+                label: '비밀번호 ($minPassword~128자)',
                 controller: password,
                 enabled: !busy,
                 obscureText: hidden,
@@ -73,9 +78,9 @@ class _LiveAuthPageState extends State<LiveAuthPage> {
                   ),
                 ),
                 validator: (v) =>
-                    (v?.length ?? 0) >= 12 && (v?.length ?? 0) <= 128
+                    (v?.length ?? 0) >= minPassword && (v?.length ?? 0) <= 128
                     ? null
-                    : '12~128자로 입력해 주세요.',
+                    : '$minPassword~128자로 입력해 주세요.',
               ),
             ],
           ),
